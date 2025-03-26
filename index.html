@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDXChainge - Blockchain FD Exchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark-glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">FDXChainge</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="connectPhantom" class="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700">
+                        <i class="bi bi-wallet2"></i> Connect Phantom
+                    </button>
+                    <button id="connectMetamask" class="bg-orange-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-600">
+                        <i class="bi bi-wallet2"></i> Connect MetaMask
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-gray-500 text-sm">Total FD Value</h3>
+                <p class="text-2xl font-bold">$45,678</p>
+                <span class="text-green-500 text-sm">+2.5% <i class="bi bi-arrow-up"></i></span>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-gray-500 text-sm">Active FDs</h3>
+                <p class="text-2xl font-bold">12</p>
+                <span class="text-blue-500 text-sm">4 Partners</span>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-gray-500 text-sm">Total Interest Earned</h3>
+                <p class="text-2xl font-bold">$1,234</p>
+                <span class="text-green-500 text-sm">Next Payout: 5d</span>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-gray-500 text-sm">FFD Tokens</h3>
+                <p class="text-2xl font-bold">156</p>
+                <span class="text-purple-500 text-sm">8 Different Types</span>
+            </div>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Create FD Form -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Create New FD</h2>
+                <form id="createFDForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Select Bank</label>
+                        <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option>HDFC Bank</option>
+                            <option>ICICI Bank</option>
+                            <option>SBI</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Amount (USD)</label>
+                        <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Duration (Months)</label>
+                        <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">
+                        Create FD Token
+                    </button>
+                </form>
+            </div>
+
+            <!-- Marketplace Preview -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Trending FFD Tokens</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 border rounded-lg">
+                        <div>
+                            <h3 class="font-medium">HDFC-FFD-001</h3>
+                            <p class="text-sm text-gray-500">RTI: 7.5%</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">0.5 SOL</p>
+                            <button class="text-sm bg-green-500 text-white px-3 py-1 rounded-lg">Buy</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 border rounded-lg">
+                        <div>
+                            <h3 class="font-medium">ICICI-FFD-003</h3>
+                            <p class="text-sm text-gray-500">RTI: 8.2%</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium">0.8 SOL</p>
+                            <button class="text-sm bg-green-500 text-white px-3 py-1 rounded-lg">Buy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="text-left py-3 px-4">Token ID</th>
+                            <th class="text-left py-3 px-4">Type</th>
+                            <th class="text-left py-3 px-4">Amount</th>
+                            <th class="text-left py-3 px-4">Status</th>
+                            <th class="text-left py-3 px-4">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="py-3 px-4">FFD-123</td>
+                            <td class="py-3 px-4">Buy</td>
+                            <td class="py-3 px-4">0.5 SOL</td>
+                            <td class="py-3 px-4"><span class="text-green-500">Complete</span></td>
+                            <td class="py-3 px-4">2023-10-15</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="py-3 px-4">FFD-124</td>
+                            <td class="py-3 px-4">Sell</td>
+                            <td class="py-3 px-4">0.3 SOL</td>
+                            <td class="py-3 px-4"><span class="text-green-500">Complete</span></td>
+                            <td class="py-3 px-4">2023-10-14</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Wallet Connection
+        document.getElementById('connectPhantom').addEventListener('click', async () => {
+            try {
+                if (!window.solana || !window.solana.isPhantom) {
+                    alert('Phantom wallet is not installed!');
+                    return;
+                }
+                await window.solana.connect();
+                alert('Connected to Phantom wallet!');
+            } catch (err) {
+                console.error(err);
+                alert('Failed to connect to Phantom wallet');
+            }
+        });
+
+        document.getElementById('connectMetamask').addEventListener('click', async () => {
+            try {
+                if (!window.ethereum) {
+                    alert('MetaMask is not installed!');
+                    return;
+                }
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                alert('Connected to MetaMask!');
+            } catch (err) {
+                console.error(err);
+                alert('Failed to connect to MetaMask');
+            }
+        });
+
+        // FD Creation Form
+        document.getElementById('createFDForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would normally make an API call to create the FD token
+            alert('FD Token creation initiated! Check your wallet for confirmation.');
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
